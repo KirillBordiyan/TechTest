@@ -14,28 +14,27 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
     private EntityManager em;
 
     @Override
-    public Order findOrder() {
-        String query = "SELECT o FROM orders o WHERE o.quantity >= 1 ORDER BY o.id DESC LIMIT 1";
+    public Order findOrder() { //FIXME >= 1 или строго >1?
+        String query = "SELECT o FROM Order o WHERE o.quantity >= 1 ORDER BY o.createdAt DESC LIMIT 1";
         TypedQuery<Order> typedQuery = em.createQuery(query, Order.class);
 
         return typedQuery.getSingleResult();
     }
 
     @Override
-    public List<Order> findOrders() {
+    public List<Order> findOrders(UserStatus userStatus) {
 
-        UserStatus active = UserStatus.ACTIVE;
-
+        //FIXME тут вопрос по типу данных для поля статуса
         String query = """
                 SELECT o
-                FROM orders o
-                JOIN users u USING (user_id)
-                WHERE u.user_status = :userStatus
-                ORDER BY o.created_at DESC
+                FROM Order o
+                JOIN User u ON o.userId = u.id
+                WHERE cast(u.userStatus as String) = :status
+                ORDER BY o.createdAt DESC
                 """;
 
         TypedQuery<Order> typedQuery = em.createQuery(query, Order.class);
-        typedQuery.setParameter("userStatus", active.name());
+        typedQuery.setParameter("status", userStatus.name());
         return typedQuery.getResultList();
     }
 }
