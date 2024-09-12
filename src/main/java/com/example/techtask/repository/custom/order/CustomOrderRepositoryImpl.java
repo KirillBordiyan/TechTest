@@ -14,8 +14,8 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
     private EntityManager em;
 
     @Override
-    public Order findOrder() { //FIXME >= 1 или строго >1?
-        String query = "SELECT o FROM Order o WHERE o.quantity >= 1 ORDER BY o.createdAt DESC LIMIT 1";
+    public Order findOrder() {
+        String query = "SELECT o FROM Order o WHERE o.quantity > 1 ORDER BY o.createdAt DESC LIMIT 1";
         TypedQuery<Order> typedQuery = em.createQuery(query, Order.class);
 
         return typedQuery.getSingleResult();
@@ -24,7 +24,6 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
     @Override
     public List<Order> findOrders(UserStatus userStatus) {
 
-        //FIXME тут вопрос по типу данных для поля статуса
         String query = """
                 SELECT o
                 FROM Order o

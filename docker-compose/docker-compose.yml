@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
- #localhost:5051
+
   adminer:
     container_name: adminer
     image: adminer:4.8.1

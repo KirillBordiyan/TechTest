@@ -17,12 +17,12 @@ import java.util.List;
  */
 @RestController
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("api/v1/orders")
 public class OrderController {
 
   // DI here
-  final OrderService orderService;
+  OrderService orderService;
 
   @GetMapping("desired-order")
   public Order findOrder() {
